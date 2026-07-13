@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Love Heart</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial;
+        }
+
+        #heart {
+            position: relative;
+            width: 700px;
+            height: 700px;
+        }
+
+        .word {
+            position: absolute;
+            color: #ff5ea8;
+            white-space: nowrap;
+            font-size: 14px;
+            text-shadow: 0 0 8px hotpink;
+            opacity: 0;
+            animation: show .8s forwards;
+        }
+
+        @keyframes show {
+
+            0% {
+                opacity: 0;
+                transform: scale(.2);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="heart"></div>
+
+    <script>
+
+        const heart = document.getElementById("heart");
+
+        const points = [];
+
+        // สร้างจุดของหัวใจ
+        for (let t = Math.PI; t >= -Math.PI; t -= 0.06) {
+
+            const x = 16 * Math.pow(Math.sin(t), 3);
+
+            const y =
+                13 * Math.cos(t)
+                - 5 * Math.cos(2 * t)
+                - 2 * Math.cos(3 * t)
+                - Math.cos(4 * t);
+
+            points.push({
+                x: x * 18 + 350,
+                y: -y * 18 + 330
+            });
+
+        }
+
+        let i = 0;
+
+        function create() {
+
+            if (i >= points.length) {
+
+                setTimeout(reset, 1200);
+
+                return;
+
+            }
+
+            const p = points[i];
+
+            const div = document.createElement("div");
+
+            div.className = "word";
+
+            div.innerHTML = "TE AMO";
+
+            div.style.left = p.x + "px";
+            div.style.top = p.y + "px";
+
+            heart.appendChild(div);
+
+            i++;
+
+            setTimeout(create, 18);
+
+        }
+
+        function reset() {
+
+            const all = document.querySelectorAll(".word");
+
+            let index = all.length - 1;
+
+            const timer = setInterval(() => {
+
+                if (index < 0) {
+
+                    clearInterval(timer);
+
+                    heart.innerHTML = "";
+
+                    i = 0;
+
+                    create();
+
+                    return;
+
+                }
+
+                all[index].style.opacity = "0";
+
+                setTimeout(() => {
+
+                    all[index]?.remove();
+
+                }, 1000);
+
+                index--;
+
+            }, 8);
+
+        }
+
+        create();
+
+    </script>
+
+</body>
+
+</html>
